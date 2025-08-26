@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP&family=Murecho:wght@100..900&display=swap');
+body {
+  font-family: "IBM Plex Sans JP", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  color: navy;
+  background-color: cyan;
+}
+h1 {
+  font-weight: bold;
+  font-family: "Murecho", sans-serif;
+}
+header {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: lightgreen;
+}
+.title {
+  font-size: xxx-large;
+  color: blue;
+  text-shadow: black 5px 5px 5px;
+}
+span {
+  width: 425px;
+  text-align: center;
+}
+footer {
+  height: 200px;
+  background-color: green;
+  text-align: center;
+}
+@media (max-width:650px) {
+  header {
+    background-color: cyan;
+  }
+  span {
+    display: none;
+  }
+}
