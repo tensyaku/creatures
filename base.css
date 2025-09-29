@@ -6,6 +6,13 @@ body,bug-data {
   color: navy;
   background-color: cyan;
 }
+bug-data {
+  display: block;
+  text-align: center;
+}
+.notop {
+  background-color: yellow;
+}
 h1 {
   font-weight: bold;
   font-family: "Murecho", sans-serif;
