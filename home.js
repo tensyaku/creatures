@@ -1,5 +1,6 @@
 var flug = 0;
 var nothing = 0;
+var fir = 0;
 var frm = document.getElementsByTagName("form")[0];
 var select = document.getElementsByName("bugPoG")[0];
 var btn = document.createElement("input");
@@ -60,8 +61,9 @@ btn.onclick = function formget() {
         re_li.length = re_data.length;
         re_li.fill(document.createElement("li"));
     for (let j = 0; j < re_li.length; j++) {
-        if (document.getElementsByTagName("a").length >= 3 && re_val != undefined) {
+        if ((document.getElementsByTagName("a").length >= 3 && re_val != undefined) || fir >= 1) {
             re_ul.innerHTML = "<p>もう一度ボタンを押してください</p>"
+            fir = 0;
             break;
         } else if (nothing == 0) {
             nothing = 1;
@@ -97,10 +99,10 @@ function val(dom) {
     if (re_val[dom].length == 0) {
         re_val[dom].push("sないもんはない。");
     }
-    re_val[dom].forEach(function(v){a.innerHTML = a.innerHTML +"<ul><li><a href=https://tensyaku.github.io/creatures/"+v.slice(1)+".xhtml >"+v.slice(1)+"</a></li></ul>"});
-    flug = re_val[dom].length;
+    re_val[dom].forEach(function(v){a.innerHTML = a.innerHTML +"<ul style="+"text-align:left;"+"><li><a href=https://tensyaku.github.io/creatures/"+v.slice(1)+".xhtml >"+v.slice(1)+"</a></li></ul>"});
+    if (dom == 0) {flug = re_val[dom].length;}
     a.removeAttribute("href");
     listop.pop();
     listop.push(re_ul.innerHTML);
-    console.log(document.getElementsByTagName("a").length)
+    fir++;
 }
