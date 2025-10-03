@@ -60,7 +60,7 @@ btn.onclick = function formget() {
         re_li.length = re_data.length;
         re_li.fill(document.createElement("li"));
     for (let j = 0; j < re_li.length; j++) {
-        if (document.getElementsByTagName("a").length >= 2 && re_val != undefined) {
+        if (document.getElementsByTagName("a").length >= 3 && re_val != undefined) {
             re_ul.innerHTML = "<p>もう一度ボタンを押してください</p>"
             break;
         } else if (nothing == 0) {
