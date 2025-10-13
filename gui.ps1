@@ -20,7 +20,7 @@ $btn.Text = "検索"
 $btn.Location = New-Object System.Drawing.Point(100,0)
 $btn.Size = New-Object System.Drawing.Size(120,20)
 $btn.Add_Click({
-    if ($text.Text -eq $null) {
+    if ($text.Text -ne "") {
         $global:ar += $text.Text
         $link = -join("https://tensyaku.github.io/creatures/",$text.Text,".xhtml")
         $data = Invoke-RestMethod $link
@@ -57,3 +57,4 @@ $form.Controls.Add($pic)
 
 
 $form.ShowDialog()
+
