@@ -5,7 +5,7 @@ $global:ar = @()
 chcp 65001
 
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "âÊëúåüçı"
+$form.Text = "ÁîªÂÉèÊ§úÁ¥¢"
 $form.Size = New-Object System.Drawing.Size(600,600)
 $form.MaximumSize = $form.Size
 $form.MinimumSize = $form.Size
@@ -16,32 +16,34 @@ $text.Size = New-Object System.Drawing.Size(100,30)
 $form.Controls.Add($text)
 
 $btn = New-Object System.Windows.Forms.Button
-$btn.Text = "åüçı"
+$btn.Text = "Ê§úÁ¥¢"
 $btn.Location = New-Object System.Drawing.Point(100,0)
 $btn.Size = New-Object System.Drawing.Size(120,20)
 $btn.Add_Click({
-    $global:ar += $text.Text
-    $link = -join("https://tensyaku.github.io/creatures/",$text.Text,".xhtml")
-    $data = Invoke-RestMethod $link
-    $bo = ($data."bug-article"."bug-data"."pic"."pdata"[0].length -eq 1)
-    if ($bo) {
-        $img = $data."bug-article"."bug-data"."pic"."pdata"
-    } else {
-        $a = $global:b + 1
-        $btn.Text = -join("é ê^Çå©ÇÈ(",$a,"ñáñ⁄)")
-        $img = $data."bug-article"."bug-data"."pic"."pdata"[$global:b]
-        if ($data."bug-article"."bug-data"."pic"."pdata"[$global:b + 1] -ne $null) {
-            $global:b += 1
+    if ($text.Text -eq $null) {
+        $global:ar += $text.Text
+        $link = -join("https://tensyaku.github.io/creatures/",$text.Text,".xhtml")
+        $data = Invoke-RestMethod $link
+        $bo = ($data."bug-article"."bug-data"."pic"."pdata"[0].length -eq 1)
+        if ($bo) {
+            $img = $data."bug-article"."bug-data"."pic"."pdata"
         } else {
-            $global:b = 0
+            $a = $global:b + 1
+            $btn.Text = -join("ÂÜôÁúü„ÇíË¶ã„Çã(",$a,"ÊûöÁõÆ)")
+            $img = $data."bug-article"."bug-data"."pic"."pdata"[$global:b]
+            if ($data."bug-article"."bug-data"."pic"."pdata"[$global:b + 1] -ne $null) {
+                $global:b += 1
+            } else {
+                $global:b = 0
+            }
         }
-    }
-    $cn = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."pic"."content"))
-    $ja = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."ja-name"))
-    $whe = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."where"))
-    $pic.ImageLocation = $img
-    if ($global:ar.Length -eq 1 -or $global:ar[$global:ar.Length-2] -ne $global:ar[$global:ar.Length-1]) {
-        Write-Host ("Ç±ÇÍÇÕ",$whe,"Ç…ÇƒéBâeÇ≥ÇÍÇΩ",$ja,"ÇÃ",$cn,"Ç≈Ç∑") 
+        $cn = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."pic"."content"))
+        $ja = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."ja-name"))
+        $whe = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."where"))
+        $pic.ImageLocation = $img
+        if ($global:ar.Length -eq 1 -or $global:ar[$global:ar.Length-2] -ne $global:ar[$global:ar.Length-1]) {
+            Write-Host ("„Åì„Çå„ÅØ",$whe,"„Å´„Å¶ÊíÆÂΩ±„Åï„Çå„Åü",$ja,"„ÅÆ",$cn,"„Åß„Åô") 
+        }
     }
 })
 $form.Controls.Add($btn)
@@ -52,5 +54,6 @@ $pic.Size = New-Object System.Drawing.Size(500,570)
 $pic.SizeMode = "Zoom"
 $pic.ImageLocation = "https://tensyaku.github.io/creatures/header.png"
 $form.Controls.Add($pic)
+
 
 $form.ShowDialog()
