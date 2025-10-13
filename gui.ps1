@@ -1,5 +1,6 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+$global:js = Invoke-WebRequest "https://tensyaku.github.io/creatures/bugdata.json"
 $global:b = 0
 $global:ar = @()
 chcp 65001
@@ -20,7 +21,7 @@ $btn.Text = "検索"
 $btn.Location = New-Object System.Drawing.Point(100,0)
 $btn.Size = New-Object System.Drawing.Size(120,20)
 $btn.Add_Click({
-    if ($text.Text -ne "") {
+    if ($text.Text -ne "" -and $global:js.Content.IndexOf($text.Text) -ne -1) {
         $global:ar += $text.Text
         $link = -join("https://tensyaku.github.io/creatures/",$text.Text,".xhtml")
         $data = Invoke-RestMethod $link
@@ -57,4 +58,5 @@ $form.Controls.Add($pic)
 
 
 $form.ShowDialog()
+
 
