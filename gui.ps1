@@ -14,6 +14,8 @@ $form.MinimumSize = $form.Size
 $text = New-Object System.Windows.Forms.TextBox
 $text.Location = New-Object System.Drawing.Point(0,0)
 $text.Size = New-Object System.Drawing.Size(100,30)
+$text.SelectedText = "入力してね"
+$text.SelectAll()
 $form.Controls.Add($text)
 
 $btn = New-Object System.Windows.Forms.Button
@@ -58,6 +60,7 @@ $form.Controls.Add($pic)
 
 
 $form.ShowDialog()
+
 
 
 
