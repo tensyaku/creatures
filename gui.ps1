@@ -1,9 +1,12 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+$global:v = $PSVersionTable.PSVersion.Major
 $global:js = Invoke-WebRequest "https://tensyaku.github.io/creatures/bugdata.json"
 $global:b = 0
 $global:ar = @()
-chcp 65001
+if ($global:v -ne 7) {
+    chcp 65001
+}
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "画像検索"
@@ -40,9 +43,15 @@ $btn.Add_Click({
                 $global:b = 0
             }
         }
-        $cn = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."pic"."content"))
-        $ja = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."ja-name"))
-        $whe = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."where"))
+        if ($global:v -ne 7) {
+            $cn = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."pic"."content"))
+            $ja = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."ja-name"))
+            $whe = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding("ISO-8859-1").GetBytes($data."bug-article"."bug-data"."where"))
+        } else {
+            $cn = $data."bug-article"."bug-data"."pic"."content"
+            $ja = $data."bug-article"."bug-data"."ja-name"
+            $whe = $data."bug-article"."bug-data"."where"
+        }
         $pic.ImageLocation = $img
         if ($global:ar.Length -eq 1 -or $global:ar[$global:ar.Length-2] -ne $global:ar[$global:ar.Length-1]) {
             Write-Host ("これは",$whe,"にて撮影された",$ja,"の",$cn,"です") 
@@ -60,6 +69,7 @@ $form.Controls.Add($pic)
 
 
 $form.ShowDialog()
+
 
 
 
