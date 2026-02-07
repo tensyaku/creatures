@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    </head>
+    <body>
+        <span style="margin-left: auto; margin-right: auto; text-align: center; display: block; width: 160px; height: 85px;"><p></p><progress value="0" max=""></progress></span>
+        <hr>
+        <h1></h1>
+        <form id="nyuuryoku" style="display: block;">
+            <input type="text" id="text">
+        </form>
+        <form id="takuitu" style="display: block;">
+            <input type="radio" name="r" id="a"><label for="a"></label><br>
+            <input type="radio" name="r" id="b"><label for="b"></label><br>
+            <input type="radio" name="r" id="c"><label for="c"></label><br>
+            <input type="radio" name="r" id="d"><label for="d"></label><br>
+        </form>
+        <br>
+        <input type="button" value="正解は..." onclick="kotae()" id="btn">
+        <h2></h2>
+        <p id="kaisetu" style="display: none;"></p>
+        <div style="display: none;"></div>
+        <input type="button" value="次に" style="display: none;" id="next" onclick="quizStart(count)">
+        <script>
+            var seikai = 0;
+            var count = 1;
+            var a;
+            var kazu;
+            var newAns;
+            var data;
+            var quizInfo;
+            var shinchoku = document.getElementsByTagName("p")[0]
+            var mondai = document.getElementsByTagName("h1")[0];
+            var last = document.getElementsByTagName("progress")[0];
+            var word = document.getElementById("text");
+            var hantei = document.getElementsByTagName("h2")[0];
+            var kaisetu = document.getElementById("kaisetu");
+            var nyuuryoku = document.getElementById("nyuuryoku");
+            var takuitu = document.getElementById("takuitu");
+            var next = document.getElementById("next");
+            var radio = document.getElementsByTagName("label");
+            var selecter = document.querySelectorAll("input[type='radio']")
+            var div = document.getElementsByTagName("div")[0];
+            var btn = document.getElementById("btn");
+            function kotae() {
+                last.value = count-1;
+                btn.disabled = true;
+                var moji;
+                if (div.textContent.length == 1) {
+                    if (selecter[div.textContent].checked) {
+                        seikai++;
+                        moji = "正解";
+                    } else {
+                        moji = "不正解 答えは"+ radio[div.textContent].textContent;
+                    }
+                    for (let i = 0; i < selecter.length; i++) {
+                        selecter[i].disabled = true;
+                    }
+                } else {
+                    if (word.value == div.textContent) {
+                        seikai++;
+                        moji = "正解";
+                    } else {
+                        moji = "不正解 答えは" + div.textContent;
+                    }
+                    word.disabled = true;
+                }
+                kaisetu.style.display = "block"
+                next.style.display = "block"
+                hantei.textContent = moji;
+            }
+            function nextIs(n) {
+                if (typeof quizInfo[n][1].解答 != "string") {
+                    a = -1;
+                    newAns = quizInfo[n][1].解答.map(
+                        function (ans) {
+                        a++;
+                        if (ans.lastIndexOf("a") == -1) {
+                            return ans
+                        } else {
+                            div.textContent = a;
+                            return ans.replace("a","")
+                        }
+                        }
+                    )
+                    for (let i = 0; i < radio.length; i++) {
+                        radio[i].textContent = newAns[i]
+                    }
+                    nyuuryoku.style.display = "none";
+                    for (let i = 0; i < selecter.length; i++) {
+                        selecter[i].style.display = "inline-block";
+                        radio[i].style.display = "inline-block";
+                    }
+                } else {
+                    div.textContent = quizInfo[n][1].解答;
+                    nyuuryoku.style.display = "block"
+                    for (let i = 0; i < selecter.length; i++) {
+                        selecter[i].style.display = "none";
+                        radio[i].style.display = "none";
+                    }
+                }
+                hantei.textContent = ""
+                kaisetu.style.display = "none"
+                next.style.display = "none"
+            }
+            function quizStart(i){
+                for (let j = 0; j < selecter.length; j++) {
+                    selecter[j].disabled = false;
+                }
+                btn.disabled = false;
+                word.disabled = false;
+                word.value = "";
+                if (kazu.length != count) {
+                    mondai.innerHTML = '<ol><li value='+ count +'>'+quizInfo[i][0]+'</li></ol>';
+                    kaisetu.innerHTML = "<p>"+quizInfo[i][1].解説+"</p>";
+                    nextIs(i);
+                    count++;
+                } else {
+                    document.writeln('<h1 style="font-size: 500%; text-align: center; text-shadow: gray 2px 2px 2px;">'+seikai+"問正解</h1>");
+                    document.body.style.height = "500px";
+                    document.getElementsByTagName("h1")[0].style.lineHeight = "500px";
+                }
+            }
+            fetch("https://tensyaku.github.io/creatures/quiz.json")
+            .then(Response => Response.json())
+            .then(
+                data => {
+                    quizInfo = Object.entries(data);
+                    kazu = Object.keys(data);
+                    quizStart(count);
+                    document.title = quizInfo[0][1];
+                    last.max = kazu.length-1;
+                    shinchoku.textContent = "進捗（"+(kazu.length-1)+"問中）："
+                }
+            );
+        </script>
+    </body>
+</html>
